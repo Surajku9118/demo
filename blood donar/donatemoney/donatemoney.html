@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation Form</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            background-image: url("images/money2.jpg"); /* Replace with your nature-related image URL */
+            background-size: cover; /* This ensures the image covers the entire background */
+            background-repeat: no-repeat; /* This prevents the image from repeating */
+            background-attachment: fixed; /* This makes the background image fixed while scrolling */
+        }
+        .container {
+            margin-top: 50px;
+            margin-left:-15%;
+        }
+        .form-container {
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .amount-buttons .btn {
+            margin-bottom: 10px;
+        }
+        .payment-options {
+            display: none;
+        }
+        .other-ways-to-donate {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="form-container">
+                <h2 class="text-center">Donate Now</h2>
+                <form id="donationForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label>Donation Frequency</label>
+                        <div>
+                            <button type="button" class="btn btn-outline-primary mr-2" onclick="setFrequency('one-time')">One Time</button>
+                            <button type="button" class="btn btn-outline-primary" onclick="setFrequency('monthly')">Monthly</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Donation Amount</label>
+                        <div class="amount-buttons">
+                            <button type="button" class="btn btn-outline-success" onclick="setAmount(100)">100</button>
+                            <button type="button" class="btn btn-outline-success" onclick="setAmount(500)">500</button>
+                            <button type="button" class="btn btn-outline-success" onclick="setAmount(1000)">1000</button>
+                            <button type="button" class="btn btn-outline-success" onclick="setAmount(2500)">2500</button>
+                            <button type="button" class="btn btn-outline-success" onclick="setAmount(10000)">10000</button>
+                        </div>
+                        <input type="number" class="form-control mt-3" id="customAmount" placeholder="Enter custom amount" oninput="checkAmount()">
+                    </div>
+                    <div class="payment-options">
+                        <div class="form-group">
+                            <label for="paymentMethod">Payment Method</label>
+                            <select class="form-control" id="paymentMethod">
+                                <option value="credit-card">Credit Card</option>
+                                <option value="qr-code">QR Code</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div id="creditCardInfo" class="payment-details">
+                            <div class="form-group">
+                                <label for="cardNumber">Card Number</label>
+                                <input type="text" class="form-control" id="cardNumber" placeholder="Enter card number">
+                            </div>
+                            <div class="form-group">
+                                <label for="expiryDate">Expiry Date</label>
+                                <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY">
+                            </div>
+                            <div class="form-group">
+                                <label for="cvv">CVV</label>
+                                <input type="text" class="form-control" id="cvv" placeholder="CVV">
+                            </div>
+                        </div>
+                        <div id="qrCodeInfo" class="payment-details">
+                            <p>Scan the QR code below to make a payment:</p>
+                            <img src="images/Qr code.png" alt="QR Code">
+                        </div>
+                        <div id="otherPaymentInfo" class="other-ways-to-donate">
+                            <h4>Other Ways to Donate</h4>
+                            <div id="donateByMail">
+                                <h5>Donate by Mail</h5>
+                                <p>Send your check to:</p>
+                                <p>Charity Name<br>123 Charity St.<br>City, State ZIP</p>
+                            </div>
+                            <div id="donateByPhone">
+                                <h5>Donate by Phone</h5>
+                                <p>Call us at: <a href="tel:+1234567890">+1 (234) 567-890</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Donate</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function setFrequency(frequency) {
+        console.log(frequency); // for debugging
+        // Additional logic for frequency can be added here
+    }
+
+    function setAmount(amount) {
+        document.getElementById('customAmount').value = amount;
+        checkAmount();
+    }
+
+    function checkAmount() {
+        const amount = document.getElementById('customAmount').value;
+        const paymentOptions = document.querySelector('.payment-options');
+        if (amount > 0) {
+            paymentOptions.style.display = 'block';
+        } else {
+            paymentOptions.style.display = 'none';
+        }
+    }
+
+    document.getElementById('paymentMethod').addEventListener('change', function() {
+        const selectedMethod = this.value;
+        const paymentDetails = document.querySelectorAll('.payment-details');
+        paymentDetails.forEach(detail => detail.style.display = 'none');
+        if (selectedMethod === 'credit-card') {
+            document.getElementById('creditCardInfo').style.display = 'block';
+        } else if (selectedMethod === 'qr-code') {
+            document.getElementById('qrCodeInfo').style.display = 'block';
+        } else if (selectedMethod === 'other') {
+            document.getElementById('otherPaymentInfo').style.display = 'block';
+        }
+    });
+
+    document.getElementById('donationForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        // Add form submission logic here
+        alert('Form submitted!');
+    });
+</script>
+</body>
+</html>
